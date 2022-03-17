@@ -43,17 +43,18 @@ Then we will create folder for requests and Response models
 
 ## Step 5: Creating Base Model
 In enttie sproject First model will be BaseEntity which will have an ID property . All other database entities will derive from this class.
-
+```csharp
 public class BaseEntity
 {
         [Key] //Comment about Key
         public string Id { get; set; }
 }
-
+```
 
 ## Step 6: Account Model
 Next create a model to store accounts information 
 
+```csharp
   public class Account : BaseEntity //Inheriting ID to uniquly identify account in database
     {
         // String that uniquely identifies the account
@@ -73,10 +74,11 @@ Next create a model to store accounts information
         Active = 0, //When account can perform transactions
         InActive = 1 // When account cannot perform transaction
     }
-
+```
 ## Step 7 Transaction Model
 Next create a model to store Transactions related to an Account
 
+```csharp
  public class Transaction : BaseEntity // 
     {
 //Treansaction type
@@ -94,7 +96,7 @@ Next create a model to store Transactions related to an Account
         Deposit = 0,  //When money is added  
         Withdraw = 1    //When money is subtracted 
     }
-
+```
 after these steps the over all project sturcture should look like this 
 <expanded image>
 
@@ -110,7 +112,7 @@ Install-Package Microsoft.EntityFrameworkCore
 in the constructor of BBBankContext we will initialize Accounts and will add some transactions to this account  so we can return some data .
 
 
-
+```csharp
     public class BBBankContext : DbContext //inherting from Asp.net core's dbcontext class
     {
         public BBBankContext()
@@ -156,5 +158,5 @@ in the constructor of BBBankContext we will initialize Accounts and will add som
         //public DbSet<Transaction> Transactions { get; set; }
     }
 
-
+```
 http://localhost:5070/api/Transaction/GetLastThreeYearsBalancesById/37846734-172e-4149-8cec-6f43d1eb3f60
