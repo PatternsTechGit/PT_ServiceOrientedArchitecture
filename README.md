@@ -11,7 +11,7 @@ In this project we are going to use Service Oriented Architecture (SOA)
 ## Step 1: Create Repositry for API Code
 To create the repository. See
 
-## Step 2: Initiating .net project
+## Step 2: Initiating .NET Project
 Create Empty Asp.net core Api project using .NET 6.
 
 ![image](https://user-images.githubusercontent.com/100778209/159008965-44adcb56-913f-4ca3-a45c-3f6f69f7b2d2.png)
@@ -27,7 +27,7 @@ There are going to be essentially four (4) types of projects in our application
 Create .Net class librayr projects for Entities, Infrasturture, and Services
 Delete Class1.cs files created by default.
 
-## Step 4: Enties Project 
+## Step 4: Entities Project 
 Then we will create folder for requests and Response models.
 
 ![image](https://user-images.githubusercontent.com/100778209/159009869-d2e1d096-81c5-4a50-b5e0-b35dacaeab74.png)
