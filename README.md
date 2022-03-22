@@ -226,5 +226,35 @@ public async Task<LineGraphData> GetLastThreeYearsBalancesById(string accountId)
 }
 ```
 
+## Step 12: Creating Transaction API
 
+Create a new API Controller named **TransactionController** and inject the **ITransactionService** using the constructor. 
+
+```csharp
+private readonly ITransactionService _transactionService;
+public TransactionController(ITransactionService transactionService)
+{
+    _transactionService = transactionService;
+}
+```
+
+Now we will create a method **GetLastThreeYearsBalancesById** to get last three years data for generating graph.
+
+```csharp
+[HttpGet]
+[Route("GetLastThreeYearsBalancesById/{accountId}")]
+public async Task<ActionResult> GetLastThreeYearsBalancesById(string accountId)
+{
+    try
+    {
+        // return OK status code along with LineGraphData object
+        return new OkObjectResult(await _transactionService.GetLastThreeYearsBalancesById(accountId));
+    }
+    catch (Exception ex)
+    {
+        // return Bad Request status code along with exception data
+        return new BadRequestObjectResult(ex); 
+    }
+}
+```
 
