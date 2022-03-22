@@ -177,3 +177,54 @@ public interface ITransactionService
         Task<LineGraphData> GetLastThreeYearsBalancesById(string accountId);
 }
 ```
+
+## Step 11: Creating Transaction Service Implementation
+In **Services** project we will create an implementation for our transaction service.
+
+In this class we will be implementing **ITransactionService** interface.
+
+```csharp
+public async Task<LineGraphData> GetLastThreeYearsBalancesById(string accountId)
+{
+            // Object to contain the line graph data
+            var lineGraphData = new LineGraphData();
+            
+            // Filter the bank account based on account id
+            var account = _bbBankContext.Accounts.FirstOrDefault(x => x.Id == accountId);
+
+            // Check whether the account exists
+            if (account != null)
+            {
+                // Calculate the total balance till now
+                var totalBalance = account.Transactions.Sum(x => x.TransactionAmount);
+                lineGraphData.TotalBalance = totalBalance;
+
+                // Calculate the total balance for last two years
+                var twoYearOldSum = account.Transactions.Where(
+                        x => x.TransactionDate >= DateTime.Now.AddYears(-3) &&
+                        x.TransactionDate < DateTime.Now.AddYears(-2)).Sum(y => y.TransactionAmount);
+                lineGraphData.Labels.Add(DateTime.Now.AddYears(-2).ToString("yyyy"));
+                lineGraphData.Figures.Add(twoYearOldSum);
+
+                // Calculate the total balance for last one year
+                var oneYearOldSum = account.Transactions.Where(
+                        x => x.TransactionDate >= DateTime.Now.AddYears(-2) &&
+                        x.TransactionDate < DateTime.Now.AddYears(-1)).Sum(y => y.TransactionAmount) + twoYearOldSum;
+                lineGraphData.Labels.Add(DateTime.Now.AddYears(-1).ToString("yyyy"));
+                lineGraphData.Figures.Add(oneYearOldSum);
+
+                // Calculate the total balance of current year 
+                var thisYearSum = account.Transactions.Where(
+                        x => x.TransactionDate >= DateTime.Now.AddYears(-1)).Sum(y => y.TransactionAmount) + oneYearOldSum;
+                lineGraphData.Labels.Add(DateTime.Now.ToString("yyyy"));
+                lineGraphData.Figures.Add(thisYearSum);
+
+            }
+            
+            // returning the line graph data object
+            return lineGraphData;
+}
+```
+
+
+
