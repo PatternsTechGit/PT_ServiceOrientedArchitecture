@@ -1,10 +1,9 @@
 # PT - Service Oriented Architecture
 
 There are different design pattens to architect monolithic APIs few of famous patterns are;
-- Service Oriented Architecture 
-- 
-- 
-- 
+- Service Oriented Architecture (SOA) 
+- Command Query Responsibility Segregation (CQRS)
+- Domain Driven Design (DDD)
 
 In this project we are going to use Service Oriented Architecture (SOA)
 
