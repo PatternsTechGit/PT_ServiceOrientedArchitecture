@@ -18,7 +18,7 @@ Create Empty ASP.NET Core API Project using .NET 6.
 ## Step 3: Project Strtucturing
 There are going to be essentially four (4) types of projects in our application 
 
-- API Project : Controllers & Middlewares (already created)
+- API Project : Controllers & Middlewares (already created through scaffolding)
 - Entities : Will contain database models along with Requests and Repsonse models
 - Infrastructure: Will contain Data Access logic, data seeding configuragtions and some data access design patterns like Repository DP and UOW
 - Services : Maintaining concept of Speration of Concern (SOC) this layer will contain the business logic of the application distributes in Services as per their purpose.
