@@ -11,7 +11,7 @@ In this project we are going to use Service Oriented Architecture (SOA)
 To create the repository. See ...
 
 ## Step 2: Initiating .NET Project
-Create Empty ASP.NET Core API Project using .NET 6.
+Create Empty ASP.NET Core API Project using .NET 6
 
 ![image](https://user-images.githubusercontent.com/100778209/159008965-44adcb56-913f-4ca3-a45c-3f6f69f7b2d2.png)
 
@@ -37,7 +37,7 @@ In Entities Project we will create our first model **BaseEntity** which will hav
 ```csharp
 public class BaseEntity
 {
-        [Key] //Primary Key
+        [Key] // Unique Key for entity in database
         public string Id { get; set; }
 }
 ```
@@ -46,7 +46,7 @@ public class BaseEntity
 Next create a model to store accounts information 
 
 ```csharp
-public class Account : BaseEntity // Inheriting ID to uniquly identify account in database
+public class Account : BaseEntity // Inheriting from Base Entity class
 {
         // String that uniquely identifies the account
         public string AccountNumber { get; set; }
@@ -75,7 +75,7 @@ public enum AccountStatus
 Next create a model to store Transactions related to an Account
 
 ```csharp
-public class Transaction : BaseEntity // Inheriting ID to uniquly identify account in database
+public class Transaction : BaseEntity // Inheriting from Base Entity class
 {
         //Transaction type
         public TransactionType TransactionType { get; set; }
@@ -93,30 +93,26 @@ public class Transaction : BaseEntity // Inheriting ID to uniquly identify accou
 // Two posible types of an Trasaction
 public enum TransactionType
 {
-        Deposit = 0,    // When money is added or pay in  
-        Withdraw = 1    // When money is subtracted or with drawn
+        Deposit = 0,    // When money is added to account
+        Withdraw = 1    // When money is subtracted from account
 }
 ```
 After these steps the over all project sturcture should look like as follows
 
 ![image](https://user-images.githubusercontent.com/100778209/159010704-a4bbc361-30fd-494f-8ddb-083ab03eb22e.png)
 
-## Step 8: Adding Database Context (DbContext)
+## Step 8: Adding Database Context (BBBankContext)
 
 Accessing real database and creating seed data is beyond scope of this exersise. So we will create a custom database conetxt (DbContext) with some hard coded data.
 
-Create a new C# class **BBBankContext** and drive it from  **DbContext** class. To use DbContext install a NuGet package 
-
-```
-Install-Package Microsoft.EntityFrameworkCore
-```
+Create a new C# class **BBBankContext**
 
 ## Step 9: Hard coding some data
-In the constructor of BBBankContext we will initialize Accounts and will add some transactions to this account so we can return some data .
+In the constructor of BBBankContext we will initialize Accounts and will add some transactions to this account so we can return some data.
 
 
 ```csharp
-public class BBBankContext : DbContext //inherting from Asp.net core's dbcontext class
+public class BBBankContext
 {
         public BBBankContext()
         {
@@ -205,14 +201,14 @@ public async Task<LineGraphData> GetLastThreeYearsBalancesById(string accountId)
                 lineGraphData.Labels.Add(DateTime.Now.AddYears(-2).ToString("yyyy"));
                 lineGraphData.Figures.Add(twoYearOldSum);
 
-                // Calculate the total balance for last one year
+                // Calculate the total balance for last one year also accoumulating last two years sum
                 var oneYearOldSum = account.Transactions.Where(
                         x => x.TransactionDate >= DateTime.Now.AddYears(-2) &&
                         x.TransactionDate < DateTime.Now.AddYears(-1)).Sum(y => y.TransactionAmount) + twoYearOldSum;
                 lineGraphData.Labels.Add(DateTime.Now.AddYears(-1).ToString("yyyy"));
                 lineGraphData.Figures.Add(oneYearOldSum);
 
-                // Calculate the total balance of current year 
+                // Calculate the total balance of current year also accoumulating last one year amount
                 var thisYearSum = account.Transactions.Where(
                         x => x.TransactionDate >= DateTime.Now.AddYears(-1)).Sum(y => y.TransactionAmount) + oneYearOldSum;
                 lineGraphData.Labels.Add(DateTime.Now.ToString("yyyy"));
@@ -237,7 +233,7 @@ public TransactionController(ITransactionService transactionService)
 }
 ```
 
-Now we will create a method **GetLastThreeYearsBalancesById** to get last three years data for generating graph.
+Now we will create a method **GetLastThreeYearsBalancesById** to get last three years data.
 
 ```csharp
 [HttpGet]
