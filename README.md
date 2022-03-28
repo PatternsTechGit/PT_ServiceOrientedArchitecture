@@ -222,6 +222,14 @@ public async Task<LineGraphData> GetLastThreeYearsBalancesById(string accountId)
 ```
 
 ## Step 12: Creating Transaction API
+In Program.cs file we will add **BBBankContext** and **ITransactionService** to services container.
+
+```csharp
+builder.Services.AddTransient<ITransactionService, TransactionService>();
+builder.Services.AddScoped<BBBankContext>();
+```
+
+## Step 13: Creating Transaction API
 
 Create a new API Controller named **TransactionController** and inject the **ITransactionService** using the constructor. 
 
