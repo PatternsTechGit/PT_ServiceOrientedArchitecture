@@ -1,5 +1,20 @@
 # PT - Service Oriented Architecture
 
+## Monolithic vs Microservices
+A monolithic application is simply deployed on a set of identical servers behind a load balancer. In contrast, a microservice application typically consists of a large number of services. Each service will have multiple runtime instances. And each instance need to be configured, deployed, scaled, and monitored.
+
+## About this exercise
+
+In this exercise we will
+
+* Create a new ASP.NET Core Web API 
+* Create class library projects (Entities, Infrastructure, and Services)
+* Create Entity Model for Account and Transaction
+* Initialize the data using **List**
+* Create and inject the Transaction Service
+* Finally, consume the data using API endpoint in Web API project
+
+## Design Patterns
 There are different design pattens to architect monolithic APIs few of famous patterns are;
 - Service Oriented Architecture (SOA) 
 - Command Query Responsibility Segregation (CQRS)
