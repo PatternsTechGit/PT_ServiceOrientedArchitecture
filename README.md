@@ -1,4 +1,4 @@
-# PT - Service Oriented Architecture
+# Service Oriented Architecture
 
 ## Monolithic vs Microservices
 A monolithic application is simply deployed on a set of identical servers behind a load balancer. In contrast, a microservice application typically consists of a large number of services. Each service will have multiple runtime instances. And each instance need to be configured, deployed, scaled, and monitored.
