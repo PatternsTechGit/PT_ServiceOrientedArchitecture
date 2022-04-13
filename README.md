@@ -35,7 +35,7 @@ Create Empty ASP.NET Core API Project using .NET 6
 
 ![image](https://user-images.githubusercontent.com/100778209/159008965-44adcb56-913f-4ca3-a45c-3f6f69f7b2d2.png)
 
-## Step 3: Project Strtucturing
+## Step 3: Project Structuring
 
 There are going to be essentially four (4) types of projects in our application
 
@@ -44,6 +44,8 @@ There are going to be essentially four (4) types of projects in our application
 - Infrastructure: This project contains BBBankContext that servs as fake DBContext that populates one User with its corresponding Account that has three Transactions dated of last three months with hardcoded data.
 - Services: This project contains TranasacionService with the logic of converting Transactions into LineGraphData after fetching them from BBBankContext.
 - BBBankAPI: This project contains TransactionController with 2 GET methods GetLast3MonthBalances & GetLast3MonthBalances/{accountId} to call the TransactionService.
+
+![image](https://user-images.githubusercontent.com/100778209/163235313-3d81ac2f-4ff0-485e-9f96-5c3826eadac7.png)
 
 Create .Net class librayr projects for Entities, Infrasturture, and Services
 Delete Class1.cs files created by default.
