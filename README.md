@@ -153,13 +153,13 @@ After these steps the over all project sturcture should look like as follows
 
 ![image](https://user-images.githubusercontent.com/100778209/159010704-a4bbc361-30fd-494f-8ddb-083ab03eb22e.png)
 
-## Step 8: Adding Database Context (BBBankContext)
+## Step 9: Adding Database Context (BBBankContext)
 
 Accessing real database and creating seed data is beyond scope of this exersise. So we will create a custom database conetxt (DbContext) with some hard coded data.
 
 Create a new C# class **BBBankContext**
 
-## Step 9: Hard coding some data
+## Step 10: Hard coding some data
 
 In the constructor of BBBankContext we will initialize Accounts and will add some transactions to this account so we can return some data.
 
@@ -232,7 +232,7 @@ public class BBBankContext
 
 ```
 
-## Step 10: Creating Interface for Transaction Service
+## Step 11: Creating Interface for Transaction Service
 
 In **Services** project we create an interface (contract) to implement the seperation of concerns.
 It will make our code testable and injectable as a dependency.
@@ -244,7 +244,7 @@ public interface ITransactionService
 }
 ```
 
-## Step 11: Creating Transaction Service Implementation
+## Step 12: Creating Transaction Service Implementation
 
 In **Services** project we will create an implementation for our transaction service.
 
@@ -298,7 +298,7 @@ public async Task<LineGraphData> GetLast3MonthBalances(string? accountId)
 }
 ```
 
-## Step 12: Creating Transaction API
+## Step 13: Creating Transaction API
 
 In Program.cs file we will add **BBBankContext** and **ITransactionService** to services container.
 
@@ -307,7 +307,7 @@ builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddSingleton<BBBankContext>();
 ```
 
-## Step 13: Creating Transaction API
+## Step 14: Creating Transaction API
 
 Create a new API Controller named **TransactionController** and inject the **ITransactionService** using the constructor.
 
