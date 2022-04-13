@@ -68,7 +68,29 @@ public class BaseEntity
 }
 ```
 
-## Step 6: Account Model
+## Step 6: User Model
+
+```csharp
+public class User : BaseEntity // Inheriting from Base Entity class
+{
+        // First name
+        public string FirstName { get; set; }
+        
+        // Last name
+        public string LastName { get; set; }
+        
+        // Email of the user
+        public string Email { get; set; }
+        
+        // Profile picture or avatar
+        public string ProfilePicUrl { get; set; }
+        
+        // Account attached to the user 
+        public Account Account { get; set; }
+}
+```
+
+## Step 7: Account Model
 
 Next create a model to store accounts information
 
@@ -99,7 +121,7 @@ public enum AccountStatus
 }
 ```
 
-## Step 7 Transaction Model
+## Step 8: Transaction Model
 
 Next create a model to store Transactions related to an Account
 
@@ -146,43 +168,66 @@ public class BBBankContext
 {
         public BBBankContext()
         {
-            this.Accounts = new List<Account>();                // intilizing empty accounts
-
-           // intializing some transactions
-            var tomTransactions = new List<Transaction>();
-            tomTransactions.Add(new Transaction()
+            // creating the collection for user list
+            this.Users = new List<User>();
+            
+            // initializing a new user 
+            this.Users.Add(new User
             {
-                Id = Guid.NewGuid().ToString(),                 // Auto generating Id
-                TransactionAmount = 3000M,                      // Transaction of 3000$
-                TransactionDate = DateTime.Now.AddDays(1),      // Tranaction happed yesterday
-                TransactionType = TransactionType.Deposit       // ammount was added
+                Id = "b6111852-a1e8-4757-9820-70b8c20e1ff0",
+                FirstName = "Ali",
+                LastName = "Taj",
+                Email = "malitaj-dev@outlook.com",
+                ProfilePicUrl = "https://res.cloudinary.com/demo/image/upload/w_400,h_400,c_crop,g_face,r_max/w_200/lady.jpg"
             });
-            tomTransactions.Add(new Transaction()
-            {
-                Id = Guid.NewGuid().ToString(),                 // Auto generating Id
-                TransactionAmount = -500M,                      // Transaction of 500$
-                TransactionDate = DateTime.Now.AddYears(-1),    // Transaction happend one year ago
-                TransactionType = TransactionType.Withdraw      // amount was subtracted
-            });
-            tomTransactions.Add(new Transaction()
-            {
-                Id = Guid.NewGuid().ToString(),                 // Auto generating Id
-                TransactionAmount = 1000M,                      // Transaction of 100$
-                TransactionDate = DateTime.Now.AddYears(-2),    // Transaction happend two year ago
-                TransactionType = TransactionType.Deposit       // amount was added
-            });
+            
+            // creating the collection for account list
+            this.Accounts = new List<Account>();
+            
+            // initializing a new account 
             this.Accounts.Add(new Account
             {
-                Id = "37846734-172e-4149-8cec-6f43d1eb3f60",    // Unique GUID of the account
-                AccountNumber = "0001-1001",                    // Account number
-                AccountTitle = "Tom Hanks",                     // Account Title
-                CurrentBalance = 3500M,                         // Account balance matches the transaction
-                AccountStatus = AccountStatus.Active,           // Account status
-                Transactions = tomTransactions                  // associating above transactions with the account
+                Id = "37846734-172e-4149-8cec-6f43d1eb3f60",
+                AccountNumber = "0001-1001",
+                AccountTitle = "Ali Taj",
+                CurrentBalance = 3500M,
+                AccountStatus = AccountStatus.Active,
+                User = this.Users[0]
+            });
+            
+            // creating the collection for transaction list
+            this.Transactions = new List<Transaction>();
+            
+            // initializing with some transactions 
+            this.Transactions.Add(new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                TransactionAmount = 1000M,
+                TransactionDate = DateTime.Now,
+                TransactionType = TransactionType.Deposit,
+                Account = this.Accounts[0]
+            });
+            this.Transactions.Add(new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                TransactionAmount = -100M,
+                TransactionDate = DateTime.Now.AddMonths(-1),
+                TransactionType = TransactionType.Withdraw,
+                Account = this.Accounts[0]
+            });
+            this.Transactions.Add(new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                TransactionAmount = -45M,
+                TransactionDate = DateTime.Now.AddMonths(-2),
+                TransactionType = TransactionType.Withdraw,
+                Account = this.Accounts[0]
             });
         }
+        
+        public List<Transaction> Transactions { get; set; }
         public List<Account> Accounts { get; set; }
-
+        public List<User> Users { get; set; }
 }
 
 ```
@@ -195,12 +240,7 @@ It will make our code testable and injectable as a dependency.
 ```csharp
 public interface ITransactionService
 {
-        /// <summary>
-        /// Generating dataset for last three years to display on Graph
-        /// </summary>
-        /// <param name="accountId">Unique Account Id</param>
-        /// <returns>Data in object of LineGraphData</returns>
-        Task<LineGraphData> GetLastThreeYearsBalancesById(string accountId);
+        Task<LineGraphData> GetLast3MonthBalances(string? accountId);
 }
 ```
 
@@ -211,45 +251,50 @@ In **Services** project we will create an implementation for our transaction ser
 In this class we will be implementing **ITransactionService** interface.
 
 ```csharp
-public async Task<LineGraphData> GetLastThreeYearsBalancesById(string accountId)
+public async Task<LineGraphData> GetLast3MonthBalances(string? accountId)
 {
-            // Object to contain the line graph data
-            var lineGraphData = new LineGraphData();
+        // Object to contain the line graph data
+        var lineGraphData = new LineGraphData();
 
-            // Filter the bank account based on account id
-            var account = _bbBankContext.Accounts.FirstOrDefault(x => x.Id == accountId);
-
-            // Check whether the account exists
-            if (account != null)
-            {
+        // Object to contain the transactions data
+        var allTransactions = new List<Transaction>();
+        if (accountId == null)
+        {
+                // if account id is NULL then fetch all transactions
+                allTransactions = _bbBankContext.Transactions.ToList();
+        }
+        else
+        {
+                // if account id is not NULL then fetch all transactions for specific account id
+                allTransactions = _bbBankContext.Transactions.Where(x => x.Account.Id == accountId).ToList();
+        }
+        if (allTransactions.Count() > 0)
+        {
                 // Calculate the total balance till now
-                var totalBalance = account.Transactions.Sum(x => x.TransactionAmount);
+                var totalBalance = allTransactions.Sum(x => x.TransactionAmount);
                 lineGraphData.TotalBalance = totalBalance;
-
-                // Calculate the total balance for last two years
-                var twoYearOldSum = account.Transactions.Where(
-                        x => x.TransactionDate >= DateTime.Now.AddYears(-3) &&
-                        x.TransactionDate < DateTime.Now.AddYears(-2)).Sum(y => y.TransactionAmount);
-                lineGraphData.Labels.Add(DateTime.Now.AddYears(-2).ToString("yyyy"));
-                lineGraphData.Figures.Add(twoYearOldSum);
-
-                // Calculate the total balance for last one year also accoumulating last two years sum
-                var oneYearOldSum = account.Transactions.Where(
-                        x => x.TransactionDate >= DateTime.Now.AddYears(-2) &&
-                        x.TransactionDate < DateTime.Now.AddYears(-1)).Sum(y => y.TransactionAmount) + twoYearOldSum;
-                lineGraphData.Labels.Add(DateTime.Now.AddYears(-1).ToString("yyyy"));
-                lineGraphData.Figures.Add(oneYearOldSum);
-
-                // Calculate the total balance of current year also accoumulating last one year amount
-                var thisYearSum = account.Transactions.Where(
-                        x => x.TransactionDate >= DateTime.Now.AddYears(-1)).Sum(y => y.TransactionAmount) + oneYearOldSum;
-                lineGraphData.Labels.Add(DateTime.Now.ToString("yyyy"));
-                lineGraphData.Figures.Add(thisYearSum);
-
-            }
-
-            // returning the line graph data object
-            return lineGraphData;
+                
+                decimal lastMonthTotal = 0;
+                
+                // looping through last three months starting from the current
+                for (int i = 3; i > 0; i--)
+                {
+                    // Calculate the running total balance
+                    var runningTotal = allTransactions.Where(x => x.TransactionDate >= DateTime.Now.AddMonths(-i) &&
+                       x.TransactionDate < DateTime.Now.AddMonths(-i + 1)).Sum(y => y.TransactionAmount) + lastMonthTotal;
+                       
+                    // adding labels to line graph data for current month and year
+                    lineGraphData.Labels.Add(DateTime.Now.AddMonths(-i + 1).ToString("MMM yyyy"));
+                    
+                    // adding data to line graph data for current month and year
+                    lineGraphData.Figures.Add(runningTotal);
+                    
+                    // saving the running total for this month
+                    lastMonthTotal = runningTotal;
+                }
+        }
+        // returning the line graph data object
+        return lineGraphData;
 }
 ```
 
@@ -259,7 +304,7 @@ In Program.cs file we will add **BBBankContext** and **ITransactionService** to 
 
 ```csharp
 builder.Services.AddScoped<ITransactionService, TransactionService>();
-builder.Services.AddScoped<BBBankContext>();
+builder.Services.AddSingleton<BBBankContext>();
 ```
 
 ## Step 13: Creating Transaction API
@@ -274,21 +319,37 @@ public TransactionController(ITransactionService transactionService)
 }
 ```
 
-Now we will create a method **GetLastThreeYearsBalancesById** to get last three years data.
+Now we will create a method **GetLast3MonthBalances** to get last three years data.
 
 ```csharp
 [HttpGet]
-[Route("GetLastThreeYearsBalancesById/{accountId}")]
-public async Task<ActionResult> GetLastThreeYearsBalancesById(string accountId)
+[Route("GetLast3MonthBalances")]
+public async Task<ActionResult> GetLast3MonthBalances()
 {
     try
     {
-        // return OK status code along with LineGraphData object
-        return new OkObjectResult(await _transactionService.GetLastThreeYearsBalancesById(accountId));
+        return new OkObjectResult(await _transactionService.GetLast3MonthBalances(null));
     }
     catch (Exception ex)
     {
-        // return Bad Request status code along with exception data
+        return new BadRequestObjectResult(ex);
+    }
+}
+```
+
+Now we will create a method **GetLast3MonthBalances** for a specific account to get last three years data.
+
+```csharp
+[HttpGet]
+[Route("GetLast3MonthBalances/{accountId}")]
+public async Task<ActionResult> GetLast3MonthBalances(string accountId)
+{
+    try
+    {
+        return new OkObjectResult(await _transactionService.GetLast3MonthBalances(accountId));
+    }
+    catch (Exception ex)
+    {
         return new BadRequestObjectResult(ex);
     }
 }
