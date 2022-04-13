@@ -9,6 +9,6 @@ namespace Services.Contracts
 {
     public interface ITransactionService
     {
-        Task<LineGraphData> GetLastThreeYearsBalancesById(string accountId);
+        Task<LineGraphData> GetLast3MonthBalances(string? accountId);
     }
 }

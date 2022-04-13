@@ -12,6 +12,7 @@ namespace Entities
         public string AccountTitle { get; set; }
         public decimal CurrentBalance { get; set; }
         public AccountStatus AccountStatus { get; set; }
+        public User User { get; set; }
         public ICollection<Transaction> Transactions { get; set; }
     }
     public enum AccountStatus

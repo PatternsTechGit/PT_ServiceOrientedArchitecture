@@ -1,4 +1,5 @@
-﻿using Entities.Responses;
+﻿using Entities;
+using Entities.Responses;
 using Infrastructure;
 using Services.Contracts;
 using System;
@@ -16,34 +17,33 @@ namespace Services
         {
             _bbBankContext = BBBankContext;
         }
-        public async Task<LineGraphData> GetLastThreeYearsBalancesById(string accountId)
+        public async Task<LineGraphData> GetLast3MonthBalances(string? accountId)
         {
             var lineGraphData = new LineGraphData();
-            
-            var account = _bbBankContext.Accounts.FirstOrDefault(x => x.Id == accountId);
 
-            if (account != null)
+            var allTransactions = new List<Transaction>();
+            if (accountId == null)
             {
-                var totalBalance = account.Transactions.Sum(x => x.TransactionAmount);
+                allTransactions = _bbBankContext.Transactions.ToList();
+            }
+            else
+            {
+                allTransactions = _bbBankContext.Transactions.Where(x => x.Account.Id == accountId).ToList();
+            }
+            if (allTransactions.Count() > 0)
+            {
+                var totalBalance = allTransactions.Sum(x => x.TransactionAmount);
                 lineGraphData.TotalBalance = totalBalance;
+                decimal lastMonthTotal = 0;
+                for (int i = 3; i > 0; i--)
+                {
 
-                var twoYearOldSum = account.Transactions.Where(
-                        x => x.TransactionDate >= DateTime.Now.AddYears(-3) &&
-                        x.TransactionDate < DateTime.Now.AddYears(-2)).Sum(y => y.TransactionAmount);
-                lineGraphData.Labels.Add(DateTime.Now.AddYears(-2).ToString("yyyy"));
-                lineGraphData.Figures.Add(twoYearOldSum);
-
-                var oneYearOldSum = account.Transactions.Where(
-                        x => x.TransactionDate >= DateTime.Now.AddYears(-2) &&
-                        x.TransactionDate < DateTime.Now.AddYears(-1)).Sum(y => y.TransactionAmount) + twoYearOldSum;
-                lineGraphData.Labels.Add(DateTime.Now.AddYears(-1).ToString("yyyy"));
-                lineGraphData.Figures.Add(oneYearOldSum);
-
-                var thisYearSum = account.Transactions.Where(
-                        x => x.TransactionDate >= DateTime.Now.AddYears(-1)).Sum(y => y.TransactionAmount) + oneYearOldSum;
-                lineGraphData.Labels.Add(DateTime.Now.ToString("yyyy"));
-                lineGraphData.Figures.Add(thisYearSum);
-
+                    var runningTotal = allTransactions.Where(x => x.TransactionDate >= DateTime.Now.AddMonths(-i) &&
+                       x.TransactionDate < DateTime.Now.AddMonths(-i + 1)).Sum(y => y.TransactionAmount) + lastMonthTotal;
+                    lineGraphData.Labels.Add(DateTime.Now.AddMonths(-i + 1).ToString("MMM yyyy"));
+                    lineGraphData.Figures.Add(runningTotal);
+                    lastMonthTotal = runningTotal;
+                }
             }
             return lineGraphData;
         }
