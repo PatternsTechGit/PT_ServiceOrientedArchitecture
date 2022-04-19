@@ -355,3 +355,7 @@ public async Task<ActionResult> GetLast12MonthBalances(string accountId)
     }
 }
 ```
+
+The result looks like this
+
+![12m](12m.jpg)
