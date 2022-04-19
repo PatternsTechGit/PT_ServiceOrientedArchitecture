@@ -18,7 +18,7 @@ namespace Services
             _bbBankContext = BBBankContext;
         }
 
-        public async Task<LineGraphData> GetLast3MonthBalances(string? accountId)
+        public async Task<LineGraphData> GetLast12MonthBalances(string? accountId)
         {
             // Object to contain the line graph data
             var lineGraphData = new LineGraphData();
@@ -44,7 +44,7 @@ namespace Services
                 decimal lastMonthTotal = 0;
 
                 // looping through last three months starting from the current
-                for (int i = 3; i > 0; i--)
+                for (int i = 12; i > 0; i--)
                 {
                     // Calculate the running total balance
                     var runningTotal = allTransactions.Where(x => x.TransactionDate >= DateTime.Now.AddMonths(-i) &&

@@ -43,7 +43,7 @@ There are going to be essentially four (4) types of projects in our application
 - Entities: This project contains DB models like User where each User has one Account and each Account can have one or many Transactions. There is also a Response Model of LineGraphData that will be returned as API Response.
 - Infrastructure: This project contains BBBankContext that servs as fake DBContext that populates one User with its corresponding Account that has three Transactions dated of last three months with hardcoded data.
 - Services: This project contains TranasacionService with the logic of converting Transactions into LineGraphData after fetching them from BBBankContext.
-- BBBankAPI: This project contains TransactionController with 2 GET methods GetLast3MonthBalances & GetLast3MonthBalances/{accountId} to call the TransactionService.
+- BBBankAPI: This project contains TransactionController with 2 GET methods GetLast12MonthBalances & GetLast12MonthBalances/{accountId} to call the TransactionService.
 
 ![image](https://user-images.githubusercontent.com/100778209/163235313-3d81ac2f-4ff0-485e-9f96-5c3826eadac7.png)
 
@@ -223,6 +223,7 @@ public class BBBankContext
                 TransactionType = TransactionType.Withdraw,
                 Account = this.Accounts[0]
             });
+            //More Transactions ....
         }
         
         public List<Transaction> Transactions { get; set; }
@@ -240,7 +241,7 @@ It will make our code testable and injectable as a dependency.
 ```csharp
 public interface ITransactionService
 {
-        Task<LineGraphData> GetLast3MonthBalances(string? accountId);
+        Task<LineGraphData> GetLast12MonthBalances(string? accountId);
 }
 ```
 
@@ -251,7 +252,7 @@ In **Services** project we will create an implementation for our transaction ser
 In this class we will be implementing **ITransactionService** interface.
 
 ```csharp
-public async Task<LineGraphData> GetLast3MonthBalances(string? accountId)
+public async Task<LineGraphData> GetLast12MonthBalances(string? accountId)
 {
         // Object to contain the line graph data
         var lineGraphData = new LineGraphData();
@@ -319,16 +320,16 @@ public TransactionController(ITransactionService transactionService)
 }
 ```
 
-Now we will create a method **GetLast3MonthBalances** to get last three years data.
+Now we will create a method **GetLast12MonthBalances** to get last three years data.
 
 ```csharp
 [HttpGet]
-[Route("GetLast3MonthBalances")]
-public async Task<ActionResult> GetLast3MonthBalances()
+[Route("GetLast12MonthBalances")]
+public async Task<ActionResult> GetLast12MonthBalances()
 {
     try
     {
-        return new OkObjectResult(await _transactionService.GetLast3MonthBalances(null));
+        return new OkObjectResult(await _transactionService.GetLast12MonthBalances(null));
     }
     catch (Exception ex)
     {
@@ -337,16 +338,16 @@ public async Task<ActionResult> GetLast3MonthBalances()
 }
 ```
 
-Now we will create a method **GetLast3MonthBalances** for a specific account to get last three years data.
+Now we will create a method **GetLast12MonthBalances** for a specific account to get last three years data.
 
 ```csharp
 [HttpGet]
-[Route("GetLast3MonthBalances/{accountId}")]
-public async Task<ActionResult> GetLast3MonthBalances(string accountId)
+[Route("GetLast12MonthBalances/{accountId}")]
+public async Task<ActionResult> GetLast12MonthBalances(string accountId)
 {
     try
     {
-        return new OkObjectResult(await _transactionService.GetLast3MonthBalances(accountId));
+        return new OkObjectResult(await _transactionService.GetLast12MonthBalances(accountId));
     }
     catch (Exception ex)
     {

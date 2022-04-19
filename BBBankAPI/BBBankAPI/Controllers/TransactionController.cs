@@ -14,12 +14,12 @@ namespace BBBankAPI.Controllers
             _transactionService = transactionService;
         }
         [HttpGet]
-        [Route("GetLast3MonthBalances")]
-        public async Task<ActionResult> GetLast3MonthBalances()
+        [Route("GetLast12MonthBalances")]
+        public async Task<ActionResult> GetLast12MonthBalances()
         {
             try
             {
-                return new OkObjectResult(await _transactionService.GetLast3MonthBalances(null));
+                return new OkObjectResult(await _transactionService.GetLast12MonthBalances(null));
             }
             catch (Exception ex)
             {
@@ -27,12 +27,12 @@ namespace BBBankAPI.Controllers
             }
         }
         [HttpGet]
-        [Route("GetLast3MonthBalances/{accountId}")]
-        public async Task<ActionResult> GetLast3MonthBalances(string accountId)
+        [Route("GetLast12MonthBalances/{accountId}")]
+        public async Task<ActionResult> GetLast12MonthBalances(string accountId)
         {
             try
             {
-                return new OkObjectResult(await _transactionService.GetLast3MonthBalances(accountId));
+                return new OkObjectResult(await _transactionService.GetLast12MonthBalances(accountId));
             }
             catch (Exception ex)
             {
