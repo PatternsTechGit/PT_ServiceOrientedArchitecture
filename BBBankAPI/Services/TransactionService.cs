@@ -18,14 +18,14 @@ namespace Services
             _bbBankContext = BBBankContext;
         }
 
-        public async Task<LineGraphData> GetLast12MonthBalances(string? accountId)
+        public async Task<LineGraphData> GetLast12MonthBalances(string? userId)
         {
             // Object to contain the line graph data
             var lineGraphData = new LineGraphData();
 
             // Object to contain the transactions data
             var allTransactions = new List<Transaction>();
-            if (accountId == null)
+            if (userId == null)
             {
                 // if account id is NULL then fetch all transactions
                 allTransactions = _bbBankContext.Transactions.ToList();
@@ -33,7 +33,7 @@ namespace Services
             else
             {
                 // if account id is not NULL then fetch all transactions for specific account id
-                allTransactions = _bbBankContext.Transactions.Where(x => x.Account.Id == accountId).ToList();
+                allTransactions = _bbBankContext.Transactions.Where(x => x.Account.User.Id == userId).ToList();
             }
             if (allTransactions.Count() > 0)
             {

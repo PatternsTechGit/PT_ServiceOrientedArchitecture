@@ -43,7 +43,7 @@ There are going to be essentially four (4) types of projects in our application
 - Entities: This project contains DB models like User where each User has one Account and each Account can have one or many Transactions. There is also a Response Model of LineGraphData that will be returned as API Response.
 - Infrastructure: This project contains BBBankContext that servs as fake DBContext that populates one User with its corresponding Account that has three Transactions dated of last three months with hardcoded data.
 - Services: This project contains TranasacionService with the logic of converting Transactions into LineGraphData after fetching them from BBBankContext.
-- BBBankAPI: This project contains TransactionController with 2 GET methods GetLast12MonthBalances & GetLast12MonthBalances/{accountId} to call the TransactionService.
+- BBBankAPI: This project contains TransactionController with 2 GET methods GetLast12MonthBalances & GetLast12MonthBalances/{userId} to call the TransactionService.
 
 ![image](https://user-images.githubusercontent.com/100778209/163235313-3d81ac2f-4ff0-485e-9f96-5c3826eadac7.png)
 
@@ -241,7 +241,7 @@ It will make our code testable and injectable as a dependency.
 ```csharp
 public interface ITransactionService
 {
-        Task<LineGraphData> GetLast12MonthBalances(string? accountId);
+        Task<LineGraphData> GetLast12MonthBalances(string? userId);
 }
 ```
 
@@ -252,14 +252,14 @@ In **Services** project we will create an implementation for our transaction ser
 In this class we will be implementing **ITransactionService** interface.
 
 ```csharp
-public async Task<LineGraphData> GetLast12MonthBalances(string? accountId)
+public async Task<LineGraphData> GetLast12MonthBalances(string? userId)
 {
         // Object to contain the line graph data
         var lineGraphData = new LineGraphData();
 
         // Object to contain the transactions data
         var allTransactions = new List<Transaction>();
-        if (accountId == null)
+        if (userId == null)
         {
                 // if account id is NULL then fetch all transactions
                 allTransactions = _bbBankContext.Transactions.ToList();
@@ -267,7 +267,7 @@ public async Task<LineGraphData> GetLast12MonthBalances(string? accountId)
         else
         {
                 // if account id is not NULL then fetch all transactions for specific account id
-                allTransactions = _bbBankContext.Transactions.Where(x => x.Account.Id == accountId).ToList();
+                allTransactions = _bbBankContext.Transactions.Where(x => x.Account.User.Id == userId).ToList();
         }
         if (allTransactions.Count() > 0)
         {
@@ -278,7 +278,7 @@ public async Task<LineGraphData> GetLast12MonthBalances(string? accountId)
                 decimal lastMonthTotal = 0;
                 
                 // looping through last three months starting from the current
-                for (int i = 3; i > 0; i--)
+                for (int i = 12; i > 0; i--)
                 {
                     // Calculate the running total balance
                     var runningTotal = allTransactions.Where(x => x.TransactionDate >= DateTime.Now.AddMonths(-i) &&
@@ -320,7 +320,7 @@ public TransactionController(ITransactionService transactionService)
 }
 ```
 
-Now we will create a method **GetLast12MonthBalances** to get last three years data.
+Now we will create a method **GetLast12MonthBalances** to get last 12 months data.
 
 ```csharp
 [HttpGet]
@@ -338,16 +338,16 @@ public async Task<ActionResult> GetLast12MonthBalances()
 }
 ```
 
-Now we will create a method **GetLast12MonthBalances** for a specific account to get last three years data.
+Now we will create a method **GetLast12MonthBalances** for a specific account to get last 12 months data.
 
 ```csharp
 [HttpGet]
-[Route("GetLast12MonthBalances/{accountId}")]
-public async Task<ActionResult> GetLast12MonthBalances(string accountId)
+[Route("GetLast12MonthBalances/{userId}")]
+public async Task<ActionResult> GetLast12MonthBalances(string userId)
 {
     try
     {
-        return new OkObjectResult(await _transactionService.GetLast12MonthBalances(accountId));
+        return new OkObjectResult(await _transactionService.GetLast12MonthBalances(userId));
     }
     catch (Exception ex)
     {

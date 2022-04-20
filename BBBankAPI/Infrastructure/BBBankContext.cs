@@ -12,10 +12,10 @@ namespace Infrastructure
             // initializing a new user 
             this.Users.Add(new User
             {
-                Id = "b6111852-a1e8-4757-9820-70b8c20e1ff0",
-                FirstName = "Ali",
-                LastName = "Taj",
-                Email = "malitaj-dev@outlook.com",
+                Id = "aa45e3c9-261d-41fe-a1b0-5b4dcf79cfd3",    // Unique GUID of the User
+                FirstName = "Raas",                              // FirstName
+                LastName = "Masood",                               // LastName
+                Email = "rassmasood@hotmail.com",              // Email ID
                 ProfilePicUrl = "https://res.cloudinary.com/demo/image/upload/w_400,h_400,c_crop,g_face,r_max/w_200/lady.jpg"
             });
 
@@ -27,7 +27,7 @@ namespace Infrastructure
             {
                 Id = "37846734-172e-4149-8cec-6f43d1eb3f60",
                 AccountNumber = "0001-1001",
-                AccountTitle = "Ali Taj",
+                AccountTitle = "Raas Masood",
                 CurrentBalance = 3500M,
                 AccountStatus = AccountStatus.Active,
                 User = this.Users[0]
