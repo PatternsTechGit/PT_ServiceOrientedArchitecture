@@ -55,9 +55,27 @@ Delete Class1.cs files created by default.
 
 ## Step 4: Entities Project
 
-Then we will create folder for requests and Response models.
+Then we will create Response model "LineGraphData" in Response folder.
 
-![image](https://user-images.githubusercontent.com/100778209/159009869-d2e1d096-81c5-4a50-b5e0-b35dacaeab74.png)
+```csharp
+
+public class LineGraphData
+    {
+        public decimal TotalBalance { get; set; }
+        public ICollection<string> Labels { get; set; }
+        public ICollection<decimal> Figures { get; set; }
+
+        public LineGraphData()
+        {
+            Labels = new List<string>();
+            Figures = new List<decimal>();
+        }
+    }
+
+```
+
+
+![response](ressp.jpg)
 
 ## Step 5: Creating Base Model
 
@@ -72,6 +90,10 @@ public class BaseEntity
         public string Id { get; set; }
 }
 ```
+
+Then create User, Account and Transaction Entities
+
+![modal](models.jpg)
 
 ## Step 6: User Model
 
@@ -116,6 +138,8 @@ public class Account : BaseEntity // Inheriting from Base Entity class
 
         // One Account might have 0 or more Transactions (1:Many relationship)
         public ICollection<Transaction> Transactions { get; set; }
+
+        public User User { get; set; }
 }
 
 // Two posible statuses of an account
