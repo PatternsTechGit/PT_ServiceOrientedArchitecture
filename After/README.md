@@ -232,7 +232,7 @@ public class BBBankContext
             {
                 Id = Guid.NewGuid().ToString(),
                 TransactionAmount = 1000M,
-                TransactionDate = DateTime.Now,
+                TransactionDate = DateTime.UtcNow,
                 TransactionType = TransactionType.Deposit,
                 Account = this.Accounts[0]
             });
@@ -240,7 +240,7 @@ public class BBBankContext
             {
                 Id = Guid.NewGuid().ToString(),
                 TransactionAmount = -100M,
-                TransactionDate = DateTime.Now.AddMonths(-1),
+                TransactionDate = DateTime.UtcNow.AddMonths(-1),
                 TransactionType = TransactionType.Withdraw,
                 Account = this.Accounts[0]
             });
@@ -248,7 +248,7 @@ public class BBBankContext
             {
                 Id = Guid.NewGuid().ToString(),
                 TransactionAmount = -45M,
-                TransactionDate = DateTime.Now.AddMonths(-2),
+                TransactionDate = DateTime.UtcNow.AddMonths(-2),
                 TransactionType = TransactionType.Withdraw,
                 Account = this.Accounts[0]
             });
