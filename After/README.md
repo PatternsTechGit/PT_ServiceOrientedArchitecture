@@ -31,7 +31,7 @@ In this project we are going to use Service Oriented Architecture (SOA)
 
 ## Step 1: Initiating .NET Project
 
-Create Empty ASP.NET Core API Project using .NET 6
+Create Empty ASP.NET Core API Project using .NET 6 and in next step window keep the default settings:
 
 ![image](https://user-images.githubusercontent.com/100778209/159008965-44adcb56-913f-4ca3-a45c-3f6f69f7b2d2.png)
 
