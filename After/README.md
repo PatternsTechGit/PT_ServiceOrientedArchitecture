@@ -11,7 +11,7 @@ In this exercise we will
 - Create a new ASP.NET Core Web API
 - Create class library projects (Entities, Infrastructure and Services)
 - Create Entity Model for Account and Transaction
-- Initialize the data using **List**
+- Prepare the hardcoded data and access it through service in API controller 
 - Create and inject the Transaction Service
 - Finally, consume the data using API endpoint in Web API project
 
@@ -464,6 +464,7 @@ public async Task<ActionResult> GetLast12MonthBalances(string userId)
 
 
 
-After completing all above steps, build the project in visual studio and there should be no error. Upon successful build run the project and access API endpoint **GetLast12MonthBalances** and result should be similar to this:
+After completing all above steps, build the project in visual studio and there should be no error. Upon successful build run the project and access API endpoint **GetLast12MonthBalances** and result should be identical to this:
+___
 
-![12m](12m.jpg)
+>![12m](12m.jpg)
