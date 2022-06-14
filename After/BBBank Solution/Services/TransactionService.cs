@@ -48,10 +48,10 @@ namespace Services
                 {
                     // Calculate the running total balance
                     var runningTotal = allTransactions.Where(x => x.TransactionDate >= DateTime.Now.AddMonths(-i) &&
-                       x.TransactionDate < DateTimeOffset.Now.AddMonths(-i + 1)).Sum(y => y.TransactionAmount) + lastMonthTotal;
+                       x.TransactionDate < DateTime.UtcNow.AddMonths(-i + 1)).Sum(y => y.TransactionAmount) + lastMonthTotal;
 
                     // adding labels to line graph data for current month and year
-                    lineGraphData.Labels.Add(DateTimeOffset.Now.AddMonths(-i + 1).ToString("MMM yyyy"));
+                    lineGraphData.Labels.Add(DateTime.UtcNow.AddMonths(-i + 1).ToString("MMM yyyy"));
 
                     // adding data to line graph data for current month and year
                     lineGraphData.Figures.Add(runningTotal);

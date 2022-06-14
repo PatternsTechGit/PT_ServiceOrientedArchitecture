@@ -1,6 +1,6 @@
 # Service Oriented Architecture
 
-## Monolithic vs Microservices
+## Monolithic vs Microservice
 
 A monolithic application is simply deployed on a set of identical servers behind a load balancer. In contrast, a microservice application typically consists of a large number of services. Each service will have multiple runtime instances. And each instance need to be configured, deployed, scaled, and monitored.
 
@@ -9,7 +9,7 @@ A monolithic application is simply deployed on a set of identical servers behind
 In this exercise we will
 
 - Create a new ASP.NET Core Web API
-- Create class library projects (Entities, Infrastructure, and Services)
+- Create class library projects (Entities, Infrastructure and Services)
 - Create Entity Model for Account and Transaction
 - Initialize the data using **List**
 - Create and inject the Transaction Service
@@ -17,7 +17,7 @@ In this exercise we will
 
 ## Design Patterns
 
-There are different design pattens to architect monolithic APIs few of famous patterns are;
+There are different design pattens to architect monolithic APIs few of famous patterns are:
 
 - Service Oriented Architecture (SOA)
 - Command Query Responsibility Segregation (CQRS)
@@ -29,31 +29,27 @@ In this project we are going to use Service Oriented Architecture (SOA)
 - Visual studio 2022
 - Net 6
 
-## Step 1: Create Repository for API Code
-
-To create the repository. See ...
-
-## Step 2: Initiating .NET Project
+## Step 1: Initiating .NET Project
 
 Create Empty ASP.NET Core API Project using .NET 6
 
 ![image](https://user-images.githubusercontent.com/100778209/159008965-44adcb56-913f-4ca3-a45c-3f6f69f7b2d2.png)
 
-## Step 3: Project Structuring
+## Step 2: Project Structuring
 
-There are going to be essentially four (4) types of projects in our application
+There are going to be essentially four (4) types of projects in our application:
 
-- Entities: This project contains DB models like User where each User has one Account and each Account can have one or many Transactions. There is also a Response Model of LineGraphData that will be returned as API Response.
-- Infrastructure: This project contains BBBankContext that servs as fake DBContext that populates one User with its corresponding Account that has three Transactions dated of last three months with hardcoded data.
-- Services: This project contains TranasacionService with the logic of converting Transactions into LineGraphData after fetching them from BBBankContext.
-- BBBankAPI: Controllers & Middlewares,already created through scaffolding though we will create TransactionController with two GET methods GetLast12MonthBalances and GetLast12MonthBalances/{userId} to call the TransactionService. Delete extra controller and class from this project.
+- **Entities**: This project contains DB models like *User* where each User has one *Account* and each Account can have one or many *Transactions*. There is also a Response Model of *LineGraphData* that will be returned as API Response.
+- **Infrastructure**: This project contains *BBBankContext* that serves as fake DBContext that populates one User with its corresponding Account that has some Transactions.
+- **Services**: This project contains *TransactionService* with the logic of converting Transactions into LineGraphData after fetching them from BBBankContext.
+- **BBBankAPI**: Controllers & Middleware, already created through scaffolding though we will create *TransactionController* with two GET methods *GetLast12MonthBalances* and *GetLast12MonthBalances/{userId}* to call the TransactionService. Delete extra controller and class from this project.
 
 ![image](https://user-images.githubusercontent.com/100778209/163235313-3d81ac2f-4ff0-485e-9f96-5c3826eadac7.png)
 
 Create .Net class library projects for Entities, Infrastructure, and Services
 Delete Class1.cs files created by default.
 
-## Step 4: Entities Project
+## Step 3: Entities Project
 
 Then we will create Response model "LineGraphData" in Response folder.
 
@@ -77,9 +73,9 @@ public class LineGraphData
 
 ![response](ressp.jpg)
 
-## Step 5: Creating Base Model
+## Step 4: Creating Base Model
 
-In *Entities* Project we will create our first model **BaseEntity** which will have an **Id** property . All other database entities will derive from this class.
+In **Entities** Project we will create our first model *BaseEntity* which will have an *Id* property . All other database entities will derive from this class.
 
 ```csharp
 using System.ComponentModel.DataAnnotations;
@@ -95,7 +91,7 @@ Then create User, Account and Transaction Entities
 
 ![modal](models.jpg)
 
-## Step 6: User Model
+## Step 5: User Model
 
 ```csharp
 public class User : BaseEntity // Inheriting from Base Entity class
@@ -117,7 +113,7 @@ public class User : BaseEntity // Inheriting from Base Entity class
 }
 ```
 
-## Step 7: Account Model
+## Step 6: Account Model
 
 Next create a model to store accounts information
 
@@ -139,10 +135,11 @@ public class Account : BaseEntity // Inheriting from Base Entity class
         // One Account might have 0 or more Transactions (1:Many relationship)
         public ICollection<Transaction> Transactions { get; set; }
 
+        // User associated with account
         public User User { get; set; }
 }
 
-// Two posible statuses of an account
+// Two possible statuses of an account
 public enum AccountStatus
 {
         Active = 0,     // When an account can perform transactions
@@ -150,7 +147,7 @@ public enum AccountStatus
 }
 ```
 
-## Step 8: Transaction Model
+## Step 7: Transaction Model
 
 Next create a model to store Transactions related to an Account
 
@@ -166,11 +163,11 @@ public class Transaction : BaseEntity // Inheriting from Base Entity class
         //Amount of transaction
         public decimal TransactionAmount { get; set; }
 
-        //Associcated acocunt of that transaction
+        //Associated account of that transaction
         public Account Account { get; set; }
 }
 
-// Two posible types of an Trasaction
+// Two possible types of a Transaction
 public enum TransactionType
 {
         Deposit = 0,    // When money is added to account
@@ -182,13 +179,13 @@ After these steps the over all project structure should look like as follows
 
 ![image](https://user-images.githubusercontent.com/100778209/159010704-a4bbc361-30fd-494f-8ddb-083ab03eb22e.png)
 
-## Step 9: Adding Database Context (BBBankContext)
+## Step 8: Adding Database Context (BBBankContext)
 
-Accessing real database and creating seed data is beyond scope of this exercise. So we will create a custom database conetxt (DbContext) with some hard coded data.
+Accessing real database and creating seed data is beyond scope of this exercise. So we will create a custom database context (DbContext) with some hard coded data.
 
 Create a new C# class **BBBankContext** in *Infrastructure project*
 
-## Step 10: Hard coding some data
+## Step 9: Hard coding some data
 
 In the constructor of BBBankContext we will initialize Accounts and will add some transactions to this account so we can return some data.
 
@@ -213,7 +210,7 @@ public class BBBankContext
             // creating the collection for account list
             this.Accounts = new List<Account>();
             
-            // initializing a new account 
+          // initializing a new account 
             this.Accounts.Add(new Account
             {
                 Id = "37846734-172e-4149-8cec-6f43d1eb3f60",
@@ -223,16 +220,16 @@ public class BBBankContext
                 AccountStatus = AccountStatus.Active,
                 User = this.Users[0]
             });
-            
+
             // creating the collection for transaction list
             this.Transactions = new List<Transaction>();
-            
+
             // initializing with some transactions 
             this.Transactions.Add(new Transaction()
             {
                 Id = Guid.NewGuid().ToString(),
                 TransactionAmount = 1000M,
-                TransactionDate = DateTime.Now,
+                TransactionDate = DateTime.UtcNow,
                 TransactionType = TransactionType.Deposit,
                 Account = this.Accounts[0]
             });
@@ -240,7 +237,7 @@ public class BBBankContext
             {
                 Id = Guid.NewGuid().ToString(),
                 TransactionAmount = -100M,
-                TransactionDate = DateTime.Now.AddMonths(-1),
+                TransactionDate = DateTime.UtcNow.AddMonths(-1),
                 TransactionType = TransactionType.Withdraw,
                 Account = this.Accounts[0]
             });
@@ -248,11 +245,82 @@ public class BBBankContext
             {
                 Id = Guid.NewGuid().ToString(),
                 TransactionAmount = -45M,
-                TransactionDate = DateTime.Now.AddMonths(-2),
+                TransactionDate = DateTime.UtcNow.AddMonths(-2),
                 TransactionType = TransactionType.Withdraw,
                 Account = this.Accounts[0]
             });
-            //More Transactions ....
+            this.Transactions.Add(new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Account = this.Accounts[0],
+                TransactionAmount = -200M,
+                TransactionDate = DateTime.UtcNow.AddMonths(-4),
+                TransactionType = TransactionType.Withdraw
+
+            });
+            this.Transactions.Add(new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Account = this.Accounts[0],
+                TransactionAmount = 500M,
+                TransactionDate = DateTime.UtcNow.AddMonths(-5),
+                TransactionType = TransactionType.Deposit
+
+            });
+            this.Transactions.Add(new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Account = this.Accounts[0],
+                TransactionAmount = 200M,
+                TransactionDate = DateTime.UtcNow.AddMonths(-6),
+                TransactionType = TransactionType.Deposit
+
+            });
+            this.Transactions.Add(new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Account = this.Accounts[0],
+                TransactionAmount = -300M,
+                TransactionDate = DateTime.UtcNow.AddMonths(-7),
+                TransactionType = TransactionType.Withdraw
+
+            });
+            this.Transactions.Add(new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Account = this.Accounts[0],
+                TransactionAmount = -100M,
+                TransactionDate = DateTime.UtcNow.AddMonths(-8),
+                TransactionType = TransactionType.Withdraw
+
+            });
+            this.Transactions.Add(new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Account = this.Accounts[0],
+                TransactionAmount = 200M,
+                TransactionDate = DateTime.UtcNow.AddMonths(-9),
+                TransactionType = TransactionType.Deposit
+
+            });
+            this.Transactions.Add(new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Account = this.Accounts[0],
+                TransactionAmount = -500M,
+                TransactionDate = DateTime.UtcNow.AddMonths(-10),
+                TransactionType = TransactionType.Withdraw
+
+            });
+            this.Transactions.Add(new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Account = this.Accounts[0],
+                TransactionAmount = 900M,
+                TransactionDate = DateTime.UtcNow.AddMonths(-11),
+                TransactionType = TransactionType.Deposit
+
+            });
         }
         
         public List<Transaction> Transactions { get; set; }
@@ -262,9 +330,9 @@ public class BBBankContext
 
 ```
 
-## Step 11: Creating Interface for Transaction Service
+## Step 10: Creating Interface for Transaction Service
 
-In **Services** project we create an interface (contract) to implement the seperation of concerns.
+In **Services** project create an interface (contract) in Contracts folder to implement the separation of concerns.
 It will make our code testable and injectable as a dependency.
 
 ```csharp
@@ -274,7 +342,7 @@ public interface ITransactionService
 }
 ```
 
-## Step 12: Creating Transaction Service Implementation
+## Step 11: Creating Transaction Service Implementation
 
 In **Services** project we will create an implementation for our transaction service.
 
@@ -319,10 +387,10 @@ public class TransactionService : ITransactionService
                 {
                     // Calculate the running total balance
                     var runningTotal = allTransactions.Where(x => x.TransactionDate >= DateTime.Now.AddMonths(-i) &&
-                       x.TransactionDate < DateTime.Now.AddMonths(-i + 1)).Sum(y => y.TransactionAmount) + lastMonthTotal;
+                       x.TransactionDate < DateTime.UtcNow.AddMonths(-i + 1)).Sum(y => y.TransactionAmount) + lastMonthTotal;
 
                     // adding labels to line graph data for current month and year
-                    lineGraphData.Labels.Add(DateTime.Now.AddMonths(-i + 1).ToString("MMM yyyy"));
+                    lineGraphData.Labels.Add(DateTime.UtcNow.AddMonths(-i + 1).ToString("MMM yyyy"));
 
                     // adding data to line graph data for current month and year
                     lineGraphData.Figures.Add(runningTotal);
@@ -337,7 +405,7 @@ public class TransactionService : ITransactionService
     }
 ```
 
-## Step 13: Creating Transaction API
+## Step 12: Creating Transaction API
 
 In Program.cs file we will add **BBBankContext** and **ITransactionService** to services container.
 
@@ -346,7 +414,7 @@ builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddSingleton<BBBankContext>();
 ```
 
-## Step 14: Creating Transaction API
+## Step 13: Creating Transaction API
 
 Create a new API Controller named **TransactionController** and inject the **ITransactionService** using the constructor.
 
@@ -394,6 +462,8 @@ public async Task<ActionResult> GetLast12MonthBalances(string userId)
 }
 ```
 
-The result looks like this
+
+
+After completing all above steps, build the project in visual studio and there should be no error. Upon successful build run the project and access API endpoint **GetLast12MonthBalances** and result should be similar to this:
 
 ![12m](12m.jpg)

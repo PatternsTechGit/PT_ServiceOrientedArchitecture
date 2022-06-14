@@ -46,7 +46,7 @@ namespace Infrastructure
             {
                 Id = Guid.NewGuid().ToString(),
                 TransactionAmount = 1000M,
-                TransactionDate = DateTimeOffset.Now,
+                TransactionDate = DateTime.UtcNow,
                 TransactionType = TransactionType.Deposit,
                 Account = this.Accounts[0]
             });
@@ -54,7 +54,7 @@ namespace Infrastructure
             {
                 Id = Guid.NewGuid().ToString(),
                 TransactionAmount = -100M,
-                TransactionDate = DateTimeOffset.Now.AddMonths(-1),
+                TransactionDate = DateTime.UtcNow.AddMonths(-1),
                 TransactionType = TransactionType.Withdraw,
                 Account = this.Accounts[0]
             });
@@ -62,11 +62,84 @@ namespace Infrastructure
             {
                 Id = Guid.NewGuid().ToString(),
                 TransactionAmount = -45M,
-                TransactionDate = DateTimeOffset.Now.AddMonths(-2),
+                TransactionDate = DateTime.UtcNow.AddMonths(-2),
                 TransactionType = TransactionType.Withdraw,
                 Account = this.Accounts[0]
             });
-            //More Transactions ....
+            this.Transactions.Add(new Transaction()
+            {
+
+
+                Id = Guid.NewGuid().ToString(),
+                Account = this.Accounts[0],
+                TransactionAmount = -200M,
+                TransactionDate = DateTime.UtcNow.AddMonths(-4),
+                TransactionType = TransactionType.Withdraw
+
+            });
+            this.Transactions.Add(new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Account = this.Accounts[0],
+                TransactionAmount = 500M,
+                TransactionDate = DateTime.UtcNow.AddMonths(-5),
+                TransactionType = TransactionType.Deposit
+
+            });
+            this.Transactions.Add(new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Account = this.Accounts[0],
+                TransactionAmount = 200M,
+                TransactionDate = DateTime.UtcNow.AddMonths(-6),
+                TransactionType = TransactionType.Deposit
+
+            });
+            this.Transactions.Add(new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Account = this.Accounts[0],
+                TransactionAmount = -300M,
+                TransactionDate = DateTime.UtcNow.AddMonths(-7),
+                TransactionType = TransactionType.Withdraw
+
+            });
+            this.Transactions.Add(new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Account = this.Accounts[0],
+                TransactionAmount = -100M,
+                TransactionDate = DateTime.UtcNow.AddMonths(-8),
+                TransactionType = TransactionType.Withdraw
+
+            });
+            this.Transactions.Add(new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Account = this.Accounts[0],
+                TransactionAmount = 200M,
+                TransactionDate = DateTime.UtcNow.AddMonths(-9),
+                TransactionType = TransactionType.Deposit
+
+            });
+            this.Transactions.Add(new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Account = this.Accounts[0],
+                TransactionAmount = -500M,
+                TransactionDate = DateTime.UtcNow.AddMonths(-10),
+                TransactionType = TransactionType.Withdraw
+
+            });
+            this.Transactions.Add(new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Account = this.Accounts[0],
+                TransactionAmount = 900M,
+                TransactionDate = DateTime.UtcNow.AddMonths(-11),
+                TransactionType = TransactionType.Deposit
+
+            });
         }
 
         public List<Transaction> Transactions { get; set; }
