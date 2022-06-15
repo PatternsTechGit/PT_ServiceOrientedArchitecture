@@ -177,7 +177,7 @@ public enum TransactionType
 
 After these steps the over all project structure should look like as follows
 
-![image](https://user-images.githubusercontent.com/100778209/159010704-a4bbc361-30fd-494f-8ddb-083ab03eb22e.png)
+![Entities](entities.jpg)
 
 ## Step 8: Adding Database Context (BBBankContext)
 
