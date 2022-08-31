@@ -41,7 +41,7 @@ namespace Infrastructure
             {
                 Id = Guid.NewGuid().ToString(),
                 TransactionAmount = 1000M,
-                TransactionDate = DateTime.Now,
+                TransactionDate = DateTime.UtcNow,
                 TransactionType = TransactionType.Deposit,
                 Account = this.Accounts[0]
             });
@@ -49,7 +49,7 @@ namespace Infrastructure
             {
                 Id = Guid.NewGuid().ToString(),
                 TransactionAmount = -100M,
-                TransactionDate = DateTime.Now.AddMonths(-1),
+                TransactionDate = DateTime.UtcNow.AddMonths(-1),
                 TransactionType = TransactionType.Withdraw,
                 Account = this.Accounts[0]
             });
@@ -57,7 +57,7 @@ namespace Infrastructure
             {
                 Id = Guid.NewGuid().ToString(),
                 TransactionAmount = -45M,
-                TransactionDate = DateTime.Now.AddMonths(-2),
+                TransactionDate = DateTime.UtcNow.AddMonths(-2),
                 TransactionType = TransactionType.Withdraw,
                 Account = this.Accounts[0]
             });
@@ -68,7 +68,7 @@ namespace Infrastructure
                 Id = Guid.NewGuid().ToString(),
                 Account = this.Accounts[0],
                 TransactionAmount = -200M,
-                TransactionDate = DateTime.Now.AddMonths(-4),
+                TransactionDate = DateTime.UtcNow.AddMonths(-4),
                 TransactionType = TransactionType.Withdraw
 
             });
@@ -77,7 +77,7 @@ namespace Infrastructure
                 Id = Guid.NewGuid().ToString(),
                 Account = this.Accounts[0],
                 TransactionAmount = 500M,
-                TransactionDate = DateTime.Now.AddMonths(-5),
+                TransactionDate = DateTime.UtcNow.AddMonths(-5),
                 TransactionType = TransactionType.Deposit
 
             });
@@ -86,7 +86,7 @@ namespace Infrastructure
                 Id = Guid.NewGuid().ToString(),
                 Account = this.Accounts[0],
                 TransactionAmount = 200M,
-                TransactionDate = DateTime.Now.AddMonths(-6),
+                TransactionDate = DateTime.UtcNow.AddMonths(-6),
                 TransactionType = TransactionType.Deposit
 
             });
@@ -95,7 +95,7 @@ namespace Infrastructure
                 Id = Guid.NewGuid().ToString(),
                 Account = this.Accounts[0],
                 TransactionAmount = -300M,
-                TransactionDate = DateTime.Now.AddMonths(-7),
+                TransactionDate = DateTime.UtcNow.AddMonths(-7),
                 TransactionType = TransactionType.Withdraw
 
             });
@@ -104,7 +104,7 @@ namespace Infrastructure
                 Id = Guid.NewGuid().ToString(),
                 Account = this.Accounts[0],
                 TransactionAmount = -100M,
-                TransactionDate = DateTime.Now.AddMonths(-8),
+                TransactionDate = DateTime.UtcNow.AddMonths(-8),
                 TransactionType = TransactionType.Withdraw
 
             });
@@ -113,7 +113,7 @@ namespace Infrastructure
                 Id = Guid.NewGuid().ToString(),
                 Account = this.Accounts[0],
                 TransactionAmount = 200M,
-                TransactionDate = DateTime.Now.AddMonths(-9),
+                TransactionDate = DateTime.UtcNow.AddMonths(-9),
                 TransactionType = TransactionType.Deposit
 
             });
@@ -122,7 +122,7 @@ namespace Infrastructure
                 Id = Guid.NewGuid().ToString(),
                 Account = this.Accounts[0],
                 TransactionAmount = -500M,
-                TransactionDate = DateTime.Now.AddMonths(-10),
+                TransactionDate = DateTime.UtcNow.AddMonths(-10),
                 TransactionType = TransactionType.Withdraw
 
             });
@@ -131,7 +131,7 @@ namespace Infrastructure
                 Id = Guid.NewGuid().ToString(),
                 Account = this.Accounts[0],
                 TransactionAmount = 900M,
-                TransactionDate = DateTime.Now.AddMonths(-11),
+                TransactionDate = DateTime.UtcNow.AddMonths(-11),
                 TransactionType = TransactionType.Deposit
 
             });

@@ -30,7 +30,7 @@ namespace Entities
     // Two posible statuses of an account
     public enum AccountStatus
     {
-        Active = 0,     // When an account can perform transactions
-        InActive = 1    // When an account cannot perform transaction
+        Active = 1,     // When an account can perform transactions
+        InActive = 0    // When an account cannot perform transaction
     }
 }
