@@ -13,8 +13,8 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7146;http://localhost:5146",
+      "launchUrl": "api/Transaction",
+      "applicationUrl": "http://localhost:5070;https://localhost:5071;",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -22,7 +22,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "launchUrl": "api/Transaction",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
